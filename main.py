@@ -1,22 +1,20 @@
 import os
 from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, Application
 from holidays_parser import get_today_holidays
 from commands import *
 
 load_dotenv()
 def main():
     token = os.getenv("TELEGRAM_TOKEN")
-    updater = Updater(token)
-    dispatcher = updater.dispatcher
-
+    application = Application.builder().token(token).build()
     #Обработка команд
-    dispatcher.add_handler(CommandHandler("holidays", holidays))
-
+    application.add_handler(CommandHandler("holidays", holidays))
+    application.add_handler(CommandHandler("start", start))
     #Запуск
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
+
 
 
 
