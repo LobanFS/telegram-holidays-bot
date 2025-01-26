@@ -1,0 +1,14 @@
+# Файлы окружения
+venv/
+.env
+token.txt
+
+# Кэш Python
+__pycache__/
+*.pyc
+
+# Настройки IDE
+.idea/
+
+# Системные файлы
+.DS_Store
