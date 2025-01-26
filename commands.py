@@ -1,6 +1,5 @@
-from selenium.webdriver.common.devtools.v85.web_audio import ContextType
 from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, CallbackContext
+from telegram.ext import CallbackContext
 from holidays_parser import get_today_holidays
 
 async def start(update: Update, context: CallbackContext) -> None:

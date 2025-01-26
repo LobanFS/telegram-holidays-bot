@@ -1,8 +1,6 @@
 import os
 from dotenv import load_dotenv
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, Application
-from holidays_parser import get_today_holidays
+from telegram.ext import CommandHandler, Application
 from commands import *
 
 load_dotenv()
