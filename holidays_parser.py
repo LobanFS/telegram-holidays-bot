@@ -1,31 +1,24 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+import re
+import requests
 from bs4 import BeautifulSoup
 
 def get_today_holidays():
-    url = "https://kakoysegodnyaprazdnik.ru/"
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     try:
-        driver.get(url)
-        driver.implicitly_wait(1)
-        page_source = driver.page_source
-        soup = BeautifulSoup(page_source, 'html.parser')
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+        }
+        url = "https://my-calend.ru/holidays"
+        resp = requests.get(url, headers=headers)
+        soup = BeautifulSoup(resp.content, 'html.parser')
         holidays = []
-        for holiday in soup.select('[itemprop="text"]'):
-            p1 = holiday.get_text(strip=True).find('(')
-            p2 = holiday.get_text(strip=True).find(')')
-            if p1 != -1 and p2 != -1:
-                line = (holiday.get_text(strip=True)[:p1] + holiday.get_text(strip=True)[p2 + 1:])
-            else:
-                line = (holiday.get_text(strip=True))
-            if line.find('памяти') == -1 and line.find('Именины') == -1:
-                holidays.append(line)
-        holidays.append("\nУра!🎉🎉🎉")
+        for holiday in soup.select('ul.holidays-items li'):
+            line = holiday.get_text(strip=True)
+            line = re.sub(r'\d+$', '', line)
+            holidays.append("✨" + line)
+        holidays.append("Ура!🎉🎉🎉")
         return holidays
     except Exception as e:
         print(f"An error occurred: {e}")
         return []
-    finally:
-        driver.quit()
 
